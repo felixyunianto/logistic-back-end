@@ -11,26 +11,63 @@ use Auth;
 class KebutuhanLogistikController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('infoKebutuhanLogistik');
     }
-    public function infoKebutuhanLogistik(){
-        $data_kebutuhan_logistik = KebutuhanLogistik::all();
 
+    public function infoKebutuhanLogistik(){
+        $data_kebutuhan_logistik = KebutuhanLogistik::with('posko', 'produk')->get();
+
+        $results = [];
+
+        foreach($data_kebutuhan_logistik as $kebutuhan){
+            $results[] = [
+                'id' => $kebutuhan->id,
+                'id_posko' => $kebutuhan->id_posko,
+                'posko' => $kebutuhan->posko->nama,
+                'jenis_kebutuhan' => $kebutuhan->jenis_kebutuhan,
+                'keterangan' => $kebutuhan->keterangan,
+                'jumlah' => $kebutuhan->jumlah,
+                'status' => $kebutuhan->status,
+                'satuan' => $kebutuhan->satuan,
+                'tanggal' => $kebutuhan->tanggal,
+                'id_produk' => $kebutuhan->id_produk,
+                'produk' => $kebutuhan->produk->nama_produk,
+            ];
+        }
 
         return response()->json([
             'message' => 'Berhasil menampilkan kebutuhan logistik',
             'status' => 200,
-            'data' => $data_kebutuhan_logistik
+            'data' => $results
         ],200);
     }
 
-    public function infoKebutuhanLogistikByPosko($id){
-        $data_kebutuhan_logistik = KebutuhanLogistik::where('id_posko',$id)->get();
+    public function infoKebutuhanLogistikByPosko(){
+        $data_kebutuhan_logistik = KebutuhanLogistik::where('id_posko',Auth::user()->id_posko)->get();
+        
+        $results = [];
+
+        foreach($data_kebutuhan_logistik as $kebutuhan){
+            $results[] = [
+                'id' => $kebutuhan->id,
+                'id_posko' => $kebutuhan->id_posko,
+                'posko' => $kebutuhan->posko->nama,
+                'jenis_kebutuhan' => $kebutuhan->jenis_kebutuhan,
+                'keterangan' => $kebutuhan->keterangan,
+                'jumlah' => $kebutuhan->jumlah,
+                'status' => $kebutuhan->status,
+                'satuan' => $kebutuhan->satuan,
+                'tanggal' => $kebutuhan->tanggal,
+                'id_produk' => $kebutuhan->id_produk,
+                'produk' => $kebutuhan->produk->nama_produk,
+            ];
+        }
+
 
         return response()->json([
             'message' => 'Berhasil menampilkan kebutuhan logistik',
             'status' => 200,
-            'data' => $data_kebutuhan_logistik
+            'data' => $results
         ],200);
     }
 

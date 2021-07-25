@@ -79,4 +79,5 @@ Route::post('/penyaluran', 'PenyaluranLogistikController@tambahPenyaluran');
 
 //Kebutuhan
 Route::get('/kebutuhan-logistik', 'KebutuhanLogistikController@infoKebutuhanLogistik');
+Route::get('/kebutuhan-logistik/posko/', 'KebutuhanLogistikController@infoKebutuhanLogistikByPosko');
 Route::post('/kebutuhan-logistik', 'KebutuhanLogistikController@tambahKebutuhanLogistik');
