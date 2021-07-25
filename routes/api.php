@@ -81,3 +81,5 @@ Route::post('/penyaluran', 'PenyaluranLogistikController@tambahPenyaluran');
 Route::get('/kebutuhan-logistik', 'KebutuhanLogistikController@infoKebutuhanLogistik');
 Route::get('/kebutuhan-logistik/posko/', 'KebutuhanLogistikController@infoKebutuhanLogistikByPosko');
 Route::post('/kebutuhan-logistik', 'KebutuhanLogistikController@tambahKebutuhanLogistik');
+Route::put('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@ubahKebutuhanLogistik');
+Route::delete('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@hapusKebutuhanLogistik');
