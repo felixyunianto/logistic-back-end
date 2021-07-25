@@ -4,33 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\KebutuhanLogistik;
+use App\User;
+use Validator;
+use Auth;
 
 class KebutuhanLogistikController extends Controller
 {
-    // public function __construct(){
-    //     $this->middleware('auth:api');
-    // }
+    public function __construct(){
+        $this->middleware('auth:api');
+    }
     public function infoKebutuhanLogistik(){
         $data_kebutuhan_logistik = KebutuhanLogistik::all();
-
-        // $results = [];
-
-        // foreach($data_kebutuhan_logistik as $kebutuhan_logistik){
-        //     $results[] = [
-        //         "id" => $kebutuhan_logistik->id,
-        //         "id_posko" => $kebutuhan_logistik->id_posko,
-        //         "posko" => $kebutuhan_logistik->posko->nama,
-        //         "jenis_kebutuhan" => $kebutuhan_logistik->jenis_kebutuhan,
-        //         "keterangan" => $kebutuhan_logistik->keterangan,
-        //         "jumlah" => $kebutuhan_logistik->jumlah,
-        //         "status" => $kebutuhan_logistik->status,
-        //         "satuan" => $kebutuhan_logistik->satuan,
-        //         "tanggal" => $kebutuhan_logistik->tanggal,
-        //         "created_at" => $kebutuhan_logistik->created_at,
-        //         "updated_at" => $kebutuhan_logistik->updated_at,
-        //     ];
-        // }
-
 
 
         return response()->json([
@@ -51,12 +35,10 @@ class KebutuhanLogistikController extends Controller
     }
 
     public function tambahKebutuhanLogistik(Request $request){
-        $rules = [
-            'id_posko' => 'required',
+        $rules = [  
             'jenis_kebutuhan' => 'required',
             'keterangan' => 'required',
             'jumlah' => 'required',
-            'status' => 'required|in:Terpenuhi,Belum Terpenuhi',
             'tanggal' => 'required'
         ];
 
@@ -77,14 +59,21 @@ class KebutuhanLogistikController extends Controller
 
         $data_kebutuhan_logistik = KebutuhanLogistik::create([
             'id_produk' => $request->id_produk,
-            'id_posko' => $request->id_posko,
+            'id_posko' => Auth::user()->id_posko,
             'jenis_kebutuhan' => $request->jenis_kebutuhan,
             'keterangan' => $request->keterangan,
             'jumlah' => $request->jumlah,
-            'status' => $request->status,
+            'status' => 'Belum Terpenuhi',
             'satuan' => $request->satuan,
             'tanggal' => $request->tanggal
         ]);
+
+        $deviceToken = User::whereNotNull('device_token')->pluck('device_token')->all();
+        // dd($deviceToken);
+
+        $this->sendNotification("Pemberitahuan", 
+        $data_kebutuhan_logistik->posko->nama." membutuhkan " .$data_kebutuhan_logistik->produk->nama_produk." ".$data_kebutuhan_logistik->jumlah." ".$data_kebutuhan_logistik->satuan, 
+        $deviceToken);
 
         return response()->json([
             'message' => 'Berhasil menambahkan data kebutuhan logistik',
@@ -122,5 +111,53 @@ class KebutuhanLogistikController extends Controller
             'status' => 200,
             'data' => $data_kebutuhan_logistik
         ]);        
+    }
+
+    public function sendNotification($title, $body, $token){
+        $data = [
+            'title' => $title,
+            'body' => $body,
+        ];
+
+        $device_token = [];
+        
+        foreach($token as $t){
+            // dd($t);
+            $device_token[] = $t;
+        }
+
+        // dd($device_token);
+
+        $payload = [
+            'registration_ids' => $device_token,
+            'notification' => $data
+        ];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "Content-type: application/json",
+                "Authorization: key=".env('FIREBASE_SERVER_KEY')
+            ),
+        ));
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        
+        return response()->json([
+            'message' => 'Berhasil mengirim notif',
+            'status' => 200,
+            'data' => json_encode($response)
+        ], 200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\LogistikKeluar;
 use App\Logistik;
+use App\User;
 
 class LogistikKeluarController extends Controller
 {
@@ -149,9 +150,64 @@ class LogistikKeluarController extends Controller
         $logistik_keluar = LogistikKeluar::findOrFail($id);
         $logistik_keluar->update(['status' => 'Terima']);
 
+        $deviceToken = User::whereNotNull('device_token')->pluck('device_token')->where('level','Admin')->all();
+        // dd($deviceToken);
+
+        $this->sendNotification("Pemberitahuan", 
+        $data_kebutuhan_logistik->posko->nama." membutuhkan " .$data_kebutuhan_logistik->produk->nama_produk." ".$data_kebutuhan_logistik->jumlah." ".$data_kebutuhan_logistik->satuan, 
+        $deviceToken);
+
         return response()->json([
             'message' => 'Berhasil mengubah status',
             'status' => 200,
+        ], 200);
+    }
+
+    public function sendNotification($title, $body, $token){
+        $data = [
+            'title' => $title,
+            'body' => $body,
+        ];
+
+        $device_token = [];
+        
+        foreach($token as $t){
+            // dd($t);
+            $device_token[] = $t;
+        }
+
+        // dd($device_token);
+
+        $payload = [
+            'registration_ids' => $device_token,
+            'notification' => $data
+        ];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "Content-type: application/json",
+                "Authorization: key=".env('FIREBASE_SERVER_KEY')
+            ),
+        ));
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        
+        return response()->json([
+            'message' => 'Berhasil mengirim notif',
+            'status' => 200,
+            'data' => json_encode($response)
         ], 200);
     }
 }
