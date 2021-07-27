@@ -7,6 +7,7 @@ use App\PenerimaanLogistik;
 use App\LogistikKeluar;
 use App\Logistik;
 use App\User;
+use Carbon\Carbon;
 
 class PenerimaanLogistikController extends Controller
 {
@@ -58,7 +59,7 @@ class PenerimaanLogistikController extends Controller
             'status' => 'Terima',
             'pengirim_id' => $keluar->pengirim_id,
             'satuan' => $keluar->satuan,
-            'tanggal' => $keluar->tanggal,
+            'tanggal' => Carbon::now()->format("Y-m-d"),
             'id_produk' => $produk_penerimaan->id,
             'penerima_id' => $keluar->penerima_id
         ]);
