@@ -9,7 +9,7 @@ use Validator;
 class DonaturController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api')->except('infoDonatur');
+        $this->middleware('auth:api')->except('infoDonatur', 'donaturByPosko');
     }
 
     public function infoDonatur() {
