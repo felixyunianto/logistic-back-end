@@ -22,6 +22,16 @@ class PenyaluranLogistikController extends Controller
         ]);
     }
 
+    public function infoPenyaluranByPosko($id_posko){
+        $penyaluran = PenyaluranLogistik::where('pengirim_id', $id_posko)->get();
+
+        return response()->json([
+            'message' => 'Berhasil menampilkan data penyaluran',
+            'status' => 200,
+            'data' => $penyaluran
+        ]);
+    }
+
     public function tambahPenyaluran(Request $request){
         $penyaluran = PenyaluranLogistik::create([
             'jenis_kebutuhan' => $request->jenis_kebutuhan,

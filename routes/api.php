@@ -42,6 +42,7 @@ Route::delete('/petugas-posko/{id}', 'PetugasController@hapusPetugas');
 
 //Donatur
 Route::get('/donatur', 'DonaturController@infoDonatur');
+Route::get('/donatur/posko/{id_posko}', 'DonaturController@donaturByPosko');
 Route::post('/donatur', 'DonaturController@tambahDonatur');
 Route::put('/donatur/{id}', 'DonaturController@ubahDonatur');
 Route::delete('/donatur/{id}', 'DonaturController@hapusDonatur');
@@ -61,6 +62,7 @@ Route::delete('/logistik-masuk/{id}', 'LogistikMasukController@hapusLogistikMasu
 //Logistik Keluar
 Route::get('/logistik-keluar', 'LogistikKeluarController@infoLogistikKeluar');
 Route::get('/logistik-keluar/penerimaan', 'LogistikKeluarController@keluarByPenerima');
+Route::get('/logistik-keluar/posko/{id_posko}', 'LogistikKeluarController@keluarByPosko');
 Route::post('/logistik-keluar', 'LogistikKeluarController@tambahLogistikKeluar');
 Route::put('/logistik-keluar/{id}', 'LogistikKeluarController@ubahLogistikKeluar');
 Route::delete('/logistik-keluar/{id}', 'LogistikKeluarController@hapusLogistikKeluar');
@@ -68,6 +70,7 @@ Route::post('/logistik-keluar/status/{id}', 'LogistikKeluarController@terimaLogi
 
 //Penerimaan
 Route::get('/penerimaan', 'PenerimaanLogistikController@infoPenerimaan');
+Route::get('/penerimaan/posko/{id_posko}', 'PenerimaanLogistikController@penerimaanByPosko');
 Route::post('/penerimaan/keluar/{id}', 'PenerimaanLogistikController@tambahPenerimaan');
 // Route::put('/penerimaan/{id}', 'PenerimaanLogistikController@ubahLogistikKeluar');
 // Route::delete('/penerimaan/{id}', 'PenerimaanLogistikController@hapusLogistikKeluar');
@@ -75,6 +78,7 @@ Route::post('/penerimaan/keluar/{id}', 'PenerimaanLogistikController@tambahPener
 
 //Penyaluran
 Route::get('/penyaluran', 'PenyaluranLogistikController@infoPenyaluran');
+Route::get('/penyaluran/posko/{id_posko}', 'PenyaluranLogistikController@infoPenyaluranByPosko');
 Route::post('/penyaluran', 'PenyaluranLogistikController@tambahPenyaluran');
 
 //Kebutuhan

@@ -41,6 +41,35 @@ class DonaturController extends Controller
         ],200);
     }
 
+    public function donaturByPosko($id_posko){
+        $data_donatur = Donatur::where('id_posko',$id_posko)->with('posko')->orderBy('nama')->get();
+
+        $results = [];
+
+        foreach($data_donatur as $donatur){
+            $results[] = [
+                'id' => $donatur->id,
+                'nama' => $donatur->nama,
+                'jenis_kebutuhan' => $donatur->jenis_kebutuhan,
+                'keterangan' => $donatur->keterangan,
+                'alamat' => $donatur->alamat,
+                'id_posko' => $donatur->id_posko,
+                'posko_penerima' => $donatur->posko->nama,
+                'tanggal' => $donatur->tanggal,
+                'jumlah' => $donatur->jumlah,
+                'satuan' => $donatur->satuan,
+                'created_at' => $donatur->created_at,
+                'updated_at' => $donatur->updated_at,
+            ];
+        }
+
+        return response()->json([
+            'message' => 'Berhasil menampilkan data donatur',
+            'status' => 200,
+            'data' => $results
+        ],200);
+    }
+
     public function tambahDonatur(Request $request) {
         $rules =[
             'nama' => 'required',

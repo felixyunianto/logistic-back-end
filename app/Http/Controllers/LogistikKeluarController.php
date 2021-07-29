@@ -44,6 +44,38 @@ class LogistikKeluarController extends Controller
         ],200);
     }
 
+    public function keluarByPosko($id_posko){
+        $logistik_keluar = LogistikKeluar::with('posko_penerima', 'produk')
+            ->where('pengirim_id',$id_posko)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $results = [];
+
+        foreach ($logistik_keluar as $keluar){
+            $results[] = [
+                'id' => $keluar->id,
+                'jenis_kebutuhan' => $keluar->jenis_kebutuhan,
+                'keterangan' => $keluar->keterangan,
+                'jumlah' => $keluar->jumlah,
+                'status' => $keluar->status,
+                'pengirim_id' => $keluar->pengirim_id,
+                'pengirim' => $keluar->posko_pengirim->nama,
+                'satuan' => $keluar->satuan,
+                'tanggal' => $keluar->tanggal,
+                'id_produk' => $keluar->id_produk,
+                'penerima_id' => $keluar->penerima_id,
+                'penerima' => $keluar->posko_penerima->nama,
+            ];
+        }
+
+        return response()->json([
+            'message' => 'Berhasil menampilkan data logistik keluar',
+            'status' => 200,
+            'data' => $results
+        ],200);
+    }
+
     public function keluarByPenerima(){
         $logistik_keluar = LogistikKeluar::with('posko_penerima', 'produk')
             ->where('penerima_id', auth()->user()->id_posko)

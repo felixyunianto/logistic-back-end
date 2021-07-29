@@ -27,6 +27,16 @@ class PenerimaanLogistikController extends Controller
         ]);
     }
 
+    public function penerimaanByPosko($id_posko){
+        $penerimaan = PenerimaanLogistik::orderBy('tanggal','DESC')->where('penerima_id', $id_posko)->get();
+
+        return response()->json([
+            'message' => 'Berhasil menampilkan data penerimaan',
+            'status' => 200,
+            'data' => $penerimaan
+        ]);
+    }
+
     public function tambahPenerimaan(Request $request, $id){
         $keluar = LogistikKeluar::findOrFail($id);
         $produk = Logistik::where('id', $keluar->id_produk)->first();
