@@ -10,7 +10,7 @@ use App\User;
 class LogistikKeluarController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('keluarByPosko');
     }
 
     public function infoLogistikKeluar(){

@@ -12,7 +12,7 @@ use Carbon\Carbon;
 class LogistikMasukController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except("infoLogistikMasuk");
     }
 
     public function infoLogistikMasuk(){

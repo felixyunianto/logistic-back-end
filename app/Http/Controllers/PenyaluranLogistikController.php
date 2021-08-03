@@ -9,7 +9,7 @@ use App\Logistik;
 class PenyaluranLogistikController extends Controller
 {
     public function __construct(){
-        $this->middleware("auth:api");
+        $this->middleware("auth:api")->except('infoPenyaluranByPosko');
     }
 
     public function infoPenyaluran(){
