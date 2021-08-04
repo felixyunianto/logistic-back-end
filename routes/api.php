@@ -87,3 +87,6 @@ Route::get('/kebutuhan-logistik/posko/', 'KebutuhanLogistikController@infoKebutu
 Route::post('/kebutuhan-logistik', 'KebutuhanLogistikController@tambahKebutuhanLogistik');
 Route::put('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@ubahKebutuhanLogistik');
 Route::delete('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@hapusKebutuhanLogistik');
+
+//Print
+Route::get('/print-logistik-masuk', 'PdfController@logistikMasuk');
