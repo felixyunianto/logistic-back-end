@@ -90,3 +90,6 @@ Route::delete('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@hapusKebu
 
 //Print
 Route::get('/print-logistik-masuk', 'PdfController@logistikMasuk');
+Route::get('/print-logistik-keluar/{id_posko}', 'PdfController@logistiKeluar');
+Route::get('/print-penerimaan/{id_posko}', 'PdfController@penerimaanLogistik');
+Route::get('/print-penyaluran/{id_posko}', 'PdfController@penyaluranLogistik');
