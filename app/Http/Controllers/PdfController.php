@@ -14,6 +14,6 @@ class PdfController extends Controller
             $logistik_masuk = LogistikMasuk::whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])->orderBy('tanggal')->get();
         }
         $pdf = PDF::loadview('pdf.logistik-masuk', compact('logistik_masuk'));
-        return $pdf->download();
+        return $pdf->stream();
     }
 }
