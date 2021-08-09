@@ -114,8 +114,7 @@ class KebutuhanLogistikController extends Controller
 
         return response()->json([
             'message' => 'Berhasil menambahkan data kebutuhan logistik',
-            'status' => 200,
-            'data' => $data_kebutuhan_logistik
+            'status' => 200
         ],200);
     }
 
