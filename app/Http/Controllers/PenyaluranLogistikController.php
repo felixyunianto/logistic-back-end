@@ -47,7 +47,7 @@ class PenyaluranLogistikController extends Controller
         return response()->json([
             'message' => 'Berhasil menampilkan data penyaluran',
             'status' => 200,
-            'data' => $penyaluran
+            'data' => $results
         ]);
     }
 
