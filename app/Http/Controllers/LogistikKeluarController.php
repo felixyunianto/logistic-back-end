@@ -32,6 +32,7 @@ class LogistikKeluarController extends Controller
                 'satuan' => $keluar->satuan,
                 'tanggal' => $keluar->tanggal,
                 'id_produk' => $keluar->id_produk,
+                'nama_produk' => $keluar->produk->nama_produk,
                 'penerima_id' => $keluar->penerima_id,
                 'penerima' => $keluar->posko_penerima->nama,
             ];
@@ -134,8 +135,7 @@ class LogistikKeluarController extends Controller
 
         return response()->json([
             'message' => 'Berhasil menambahkan data logistik keluar',
-            'status' => 200,
-            'data' => $logistik_keluar
+            'status' => 200
         ],200);
     }
 

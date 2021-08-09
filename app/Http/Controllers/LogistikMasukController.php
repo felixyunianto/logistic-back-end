@@ -16,7 +16,7 @@ class LogistikMasukController extends Controller
     }
 
     public function infoLogistikMasuk(){
-        $logistik_masuk = LogistikMasuk::orderBy('tanggal')->get();
+        $logistik_masuk = LogistikMasuk::with('produk')->orderBy('tanggal')->get();
 
         $results = [];
 
@@ -120,8 +120,7 @@ class LogistikMasukController extends Controller
 
         return response()->json([
             'message' => 'Berhasil menambahkan logistik masuk',
-            'status' => 200,
-            'data' => $logistik_masuk
+            'status' => 200
         ], 200);
     }
 
