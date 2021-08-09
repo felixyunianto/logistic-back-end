@@ -17,6 +17,24 @@ class LogistikMasukController extends Controller
 
     public function infoLogistikMasuk(){
         $logistik_masuk = LogistikMasuk::orderBy('tanggal')->get();
+
+        $results = [];
+
+        foreach($logistik_masuk as $masuk){
+            $results[] = [
+                'id' => $masuk->id,
+                'jenis_kebutuhan' => $masuk->jenis_kebutuhan,
+                'keterangan' => $masuk->keterangan,
+                'jumlah' => $masuk->jumlah,
+                'status' => $masuk->status,
+                'pengirim' => $masuk->pengirim,
+                'satuan' => $masuk->satuan,
+                'tanggal' => $masuk->tanggal,
+                'foto' => $masuk->foto,
+                'id_produk' => $masuk->id_produk,
+                'nama_produk' => $masuk->produk->nama_produk,
+            ];
+        }
         
         return response()->json([
             'message' => 'Berhasil menampilkan logistik masuk',
