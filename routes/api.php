@@ -49,6 +49,7 @@ Route::delete('/donatur/{id}', 'DonaturController@hapusDonatur');
 
 //Logistik Produk
 Route::get('/logistik-produk', 'LogistikController@infoLogistik');
+Route::get('/logistik-produk/posko/{id_posko}', 'LogistikController@infoLogistikByPosko');
 Route::post('/logistik-produk', 'LogistikController@tambahLogistik');
 Route::put('/logistik-produk/{id}', 'LogistikController@ubahLogistik');
 Route::delete('/logistik-produk/{id}', 'LogistikController@hapusLogistik');
@@ -83,7 +84,7 @@ Route::post('/penyaluran', 'PenyaluranLogistikController@tambahPenyaluran');
 
 //Kebutuhan
 Route::get('/kebutuhan-logistik', 'KebutuhanLogistikController@infoKebutuhanLogistik');
-Route::get('/kebutuhan-logistik/posko/', 'KebutuhanLogistikController@infoKebutuhanLogistikByPosko');
+Route::get('/kebutuhan-logistik/posko/{id_posko}', 'KebutuhanLogistikController@infoKebutuhanLogistikByPosko');
 Route::post('/kebutuhan-logistik', 'KebutuhanLogistikController@tambahKebutuhanLogistik');
 Route::put('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@ubahKebutuhanLogistik');
 Route::delete('/kebutuhan-logistik/{id}', 'KebutuhanLogistikController@hapusKebutuhanLogistik');

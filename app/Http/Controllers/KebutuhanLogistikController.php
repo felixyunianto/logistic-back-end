@@ -42,8 +42,8 @@ class KebutuhanLogistikController extends Controller
         ],200);
     }
 
-    public function infoKebutuhanLogistikByPosko(){
-        $data_kebutuhan_logistik = KebutuhanLogistik::where('id_posko',Auth::user()->id_posko)->get();
+    public function infoKebutuhanLogistikByPosko($id_posko){
+        $data_kebutuhan_logistik = KebutuhanLogistik::where('id_posko',$id_posko)->get();
         
         $results = [];
 

@@ -10,7 +10,7 @@ use Validator;
 class LogistikController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('infoLogistikByPosko');
     }
 
     public function infoLogistik(){
@@ -20,6 +20,29 @@ class LogistikController extends Controller
             'message' => 'Berhasil menampilkan data logistik',
             'status' => 200,
             'data' => $logistik
+        ],200);
+    }
+
+    public function infoLogistikByPosko($id_posko){
+        $logistik = Logistik::with('posko')->where('id_posko', $id_posko)->get();
+
+        $results = [];
+
+        foreach($logistik as $l){
+            $results[] = [
+                'id' => $l->id,
+                'nama_produk' =>$l->nama_produk,
+                'posko' => $l->posko->nama,
+                'id_posko' => $l->id_posko,
+                'jumlah' => $l->jumlah,
+                'satuan' => $l->satuan,
+            ];
+        }
+
+        return response()->json([
+            'message' => 'Berhasil menampilkan data logistik',
+            'status' => 200,
+            'data' => $results
         ],200);
     }
 
