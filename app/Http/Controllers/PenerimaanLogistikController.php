@@ -28,12 +28,32 @@ class PenerimaanLogistikController extends Controller
     }
 
     public function penerimaanByPosko($id_posko){
-        $penerimaan = PenerimaanLogistik::orderBy('tanggal','DESC')->where('penerima_id', $id_posko)->get();
+        $penerimaan = PenerimaanLogistik::with('posko_pengirim', 'posko_penerima', 'produk')->orderBy('tanggal','DESC')->where('penerima_id', $id_posko)->get();
+
+        $results = [];
+
+        foreach($penerimaan as $p){
+            $results[] = [
+                'id' => $p->id,
+                'jenis_kebutuhan' => $p->jenis_kebutuhan,
+                'keterangan' => $p->keterangan,
+                'jumlah' => $p->jumlah,
+                'status' => $p->status,
+                'pengirim_id' => $p->pengirim_id,
+                'nama_pengirim' => $p->posko_pengirim->nama,
+                'satuan' => $p->satuan,
+                'tanggal' => $p->tanggal,
+                'id_produk' => $p->id_produk,
+                'nama_produk' => $p->produk->nama_produk,
+                'penerima_id' => $p->penerima_id,
+                'nama_penerima' => $p->posko_penerima->nama,
+            ];
+        }
 
         return response()->json([
             'message' => 'Berhasil menampilkan data penerimaan',
             'status' => 200,
-            'data' => $penerimaan
+            'data' => $results
         ]);
     }
 

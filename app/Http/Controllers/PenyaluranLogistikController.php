@@ -25,6 +25,25 @@ class PenyaluranLogistikController extends Controller
     public function infoPenyaluranByPosko($id_posko){
         $penyaluran = PenyaluranLogistik::where('pengirim_id', $id_posko)->get();
 
+        $results = [];
+
+        foreach($penyaluran as $p){
+            $results[] = [
+                'id' => $p->id,
+                'jenis_kebutuhan' => $p->jenis_kebutuhan,
+                'keterangan' => $p->keterangan,
+                'jumlah' => $p->jumlah,
+                'status' => $p->status,
+                'pengirim_id' => $p->pengirim_id,
+                'nama_pengirim' => $p->posko_pengirim->nama,
+                'satuan' => $p->satuan,
+                'tanggal' => $p->tanggal,
+                'id_produk' => $p->id_produk,
+                'nama_produk' => $p->produk->nama_produk,
+                'penerima' => $p->penerima
+            ];
+        }
+
         return response()->json([
             'message' => 'Berhasil menampilkan data penyaluran',
             'status' => 200,

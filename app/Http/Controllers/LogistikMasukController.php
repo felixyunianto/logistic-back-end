@@ -39,7 +39,7 @@ class LogistikMasukController extends Controller
         return response()->json([
             'message' => 'Berhasil menampilkan logistik masuk',
             'status' => 200,
-            'data' => $logistik_masuk
+            'data' => $results
         ], 200);
     }
 
