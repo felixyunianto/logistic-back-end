@@ -46,6 +46,16 @@ class PoskoController extends Controller
             ], 409);
         }
 
+        $poskoExists = Posko::where('nama', $request->nama)->first();
+
+        if($poskoExists != null){
+            return response()->json([
+                'message' => 'Gagal menambahkan data posko',
+                'status' => 409,
+                'error' => 'Nama posko sudah ada'
+            ], 409);
+        }
+
         $data_posko = Posko::create([
             'nama' => $request->nama,
             'jumlah_pengungsi' => $request->jumlah_pengungsi,

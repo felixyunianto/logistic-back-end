@@ -36,7 +36,16 @@ class BencanaController extends Controller
             'required' => ':attribute harus diisi'
         ];
 
-        $validation = Validator::make($request->all(), $rules, $messages);        
+        $validation = Validator::make($request->all(), $rules, $messages);
+
+        $bencanaExists = Bencana::where('nama', $request->nama)->first();
+        if($bencanaExists != null){
+            return response()->json([
+                'message' => 'Gagal menambahkan data bencana',
+                'status' => 200,
+                'error' => 'Nama bencana sudah ada'
+            ]);
+        }
 
         if($request->foto){
             $namaFoto = Carbon::now()->format('Y-m-d H:i:s')."-".$request->nama;
