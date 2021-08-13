@@ -42,9 +42,9 @@ class BencanaController extends Controller
         if($bencanaExists != null){
             return response()->json([
                 'message' => 'Gagal menambahkan data bencana',
-                'status' => 200,
+                'status' => 409,
                 'error' => 'Nama bencana sudah ada'
-            ]);
+            ], 409);
         }
 
         if($request->foto){
