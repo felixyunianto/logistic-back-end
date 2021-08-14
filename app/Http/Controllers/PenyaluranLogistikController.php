@@ -52,6 +52,15 @@ class PenyaluranLogistikController extends Controller
     }
 
     public function tambahPenyaluran(Request $request){
+        $produk = Logistik::findOrFail($request->id_produk);
+
+        if((int)$produk->jumlah - (int)$request->jumlah < 0){
+            return response()->json([
+                'message' => 'Jumlah barang tidak cukup',
+                'status' => 409,
+            ], 409);
+        }
+        
         $penyaluran = PenyaluranLogistik::create([
             'jenis_kebutuhan' => $request->jenis_kebutuhan,
             'keterangan' => $request->keterangan,
@@ -63,8 +72,6 @@ class PenyaluranLogistikController extends Controller
             'id_produk' => $request->id_produk,
             'penerima' => $request->penerima,
         ]);
-
-        $produk = Logistik::findOrFail($request->id_produk);
         $produk->update([
             'jumlah' => (int)$produk->jumlah - (int) $request->jumlah
         ]);
