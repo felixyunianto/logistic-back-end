@@ -142,7 +142,11 @@ class LogistikKeluarController extends Controller
 
     public function ubahLogistikKeluar(Request $request, $id){
         $produk = Logistik::findOrFail($request->id_produk);
+
         $logistik_keluar = LogistikKeluar::findOrFail($id);
+
+        $jumlah_produk= $logistik_keluar->jumlah;
+
         $logistik_keluar->update([
             'jenis_kebutuhan' => $request->jenis_kebutuhan,
             'keterangan' => $request->keterangan,
@@ -155,10 +159,11 @@ class LogistikKeluarController extends Controller
             'penerima_id' => $request->penerima_id,
         ]);
 
+
         $produk->update([
-            'jumlah' => (int)$logistik_keluar->jumlah >= (int)$request->jumlah 
-            ? (int)$produk->jumlah + ((int) $logistik_keluar->jumlah - (int)$request->jumlah) 
-            : (int)$produk->jumlah - ((int)$request->jumlah - (int) $logistik_keluar->jumlah)
+            'jumlah' => (int)$jumlah_produk >= (int)$request->jumlah 
+            ? (int)$produk->jumlah + ((int) $jumlah_produk - (int)$request->jumlah) 
+            : (int)$produk->jumlah - ((int)$request->jumlah - (int) $jumlah_produk)
         ]);
 
         return response()->json([
