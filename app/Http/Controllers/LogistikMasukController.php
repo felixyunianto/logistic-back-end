@@ -88,7 +88,7 @@ class LogistikMasukController extends Controller
 
             $id_produk = $logistik->id;
         }else{
-            $logistik = Logistik::where('id',$id_produk)->where('satuan', $request->satuan)->first();
+            $logistik = Logistik::where('id',$id_produk)->first();
             if($logistik){
                 $logistik->update([
                     'jumlah' => (int)$logistik->jumlah + (int)$request->jumlah
@@ -135,16 +135,27 @@ class LogistikMasukController extends Controller
             $publicId = $unggahFoto->getPublicId();
         }
 
+        $jumlah_produk = $logistik_masuk->jumlah;
+
+        $produk = Logistik::findOrFail($request->id_produk);
+
+        $produk->update([
+            'jumlah' => (int)$logistik_masuk->jumlah >= (int) $request->jumlah 
+            ? (int) $produk->jumlah - ((int)$logistik_masuk->jumlah - (int) $request->jumlah)
+            : (int) $produk->jumlah + ((int)$request->jumlah - (int) $logistik_masuk->jumlah)
+        ]);
+
         $logistik_masuk->update([
             'jenis_kebutuhan' => $request->jenis_kebutuhan,
             'keterangan' => $request->keterangan,
             'jumlah' => $request->jumlah,
-            'status' => $request->satuan,
+            'status' => $request->status,
             'pengirim' => $request->pengirim,
             'satuan' => $request->satuan,
             'tanggal' => $request->tanggal,
             'foto' => $request->foto? $foto : $logistik_masuk->foto,
-            'public_id' => $request->foto? $publicId : $logistik_masuk->public_id
+            'public_id' => $request->foto? $publicId : $logistik_masuk->public_id,
+            'id_produk' => $request->id_produk
         ]);
 
         return response()->json([

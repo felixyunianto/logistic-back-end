@@ -156,7 +156,7 @@ class LogistikKeluarController extends Controller
         ]);
 
         $produk->update([
-            'jumlah' => $logistik_keluar->jumlah > $request->jumlah 
+            'jumlah' => $logistik_keluar->jumlah >= $request->jumlah 
             ? (int)$produk->jumlah + ((int) $logistik_keluar->jumlah - (int)$request->jumlah) 
             : (int)$produk->jumlah - ((int)$request->jumlah - (int) $logistik_keluar->jumlah)
         ]);
