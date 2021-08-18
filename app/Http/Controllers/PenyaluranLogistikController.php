@@ -82,4 +82,44 @@ class PenyaluranLogistikController extends Controller
             'data' => $penyaluran
         ]);
     }
+
+    public function ubahPenyaluran(Request $request, $id){
+        $produk = Logistik::findOrFail($request->id_produk);
+        $penyaluran = PenyaluranLogistik::findOrFail($id);
+        $jumlah_produk = $penyaluran->jumlah;
+        $penyaluran->update([
+            'jenis_kebutuhan' => $request->jenis_kebutuhan,
+            'keterangan' => $request->keterangan,
+            'jumlah' => $request->jumlah,
+            'status' => $request->status,
+            'pengirim_id' => auth()->user()->id_posko,
+            'satuan' => $request->satuan,
+            'tanggal' => $request->tanggal,
+            'id_produk' => $request->id_produk,
+            'penerima' => $request->penerima,
+        ]);
+
+        $produk->update([
+            'jumlah' => (int)$jumlah_produk >= (int)$request->jumlah 
+            ? (int)$produk->jumlah + ((int) $jumlah_produk - (int)$request->jumlah) 
+            : (int)$produk->jumlah - ((int)$request->jumlah - (int) $jumlah_produk)
+        ]);
+
+        return response()->json([
+            'message' => 'Berhasil mengubah data penyaluran logistik',
+            'status' => 200,
+            'data' => $penyaluran
+        ],200);
+    }
+
+    public function hapusPenyaluran($id){
+        $penyaluran = PenyaluranLogistik::findOrFail($id);
+        $penyaluran->delete();
+
+        return response()->json([
+            'message' => 'Berhasil mengubah data penyaluran logistik',
+            'status' => 200,
+            'data' => $penyaluran
+        ],200);
+    }
 }

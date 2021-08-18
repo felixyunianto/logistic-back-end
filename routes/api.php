@@ -81,6 +81,8 @@ Route::post('/penerimaan/keluar/{id}', 'PenerimaanLogistikController@tambahPener
 Route::get('/penyaluran', 'PenyaluranLogistikController@infoPenyaluran');
 Route::get('/penyaluran/posko/{id_posko}', 'PenyaluranLogistikController@infoPenyaluranByPosko');
 Route::post('/penyaluran', 'PenyaluranLogistikController@tambahPenyaluran');
+Route::put('/penyaluran/{id}', 'PenyaluranLogistikController@ubahPenyaluran');
+Route::delete('/penyaluran/{id}', 'PenyaluranLogistikController@hapusPenyaluran');
 
 //Kebutuhan
 Route::get('/kebutuhan-logistik', 'KebutuhanLogistikController@infoKebutuhanLogistik');
